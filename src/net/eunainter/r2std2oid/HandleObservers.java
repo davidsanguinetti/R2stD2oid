@@ -9,5 +9,21 @@ public class HandleObservers {
 	public HandleObservers() {
 		this._observers = new ArrayList<RestObserver>();
 	}
+	
+	
+	public void addObserver(RestObserver rObserver) {
+		this._observers.add(rObserver);
+	}
+	
+	public void removeObserver(RestObserver rObserver) {
+		if (this._observers.contains(rObserver)) {
+			this._observers.remove(rObserver);
+		}
+	}
+	
+	public void notifyObservers(String restResult) {
+		for (RestObserver rObserver : this._observers)
+			rObserver.receivedResponse(restResult);
+	}
 
 }
