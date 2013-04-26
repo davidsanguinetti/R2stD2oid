@@ -1,4 +1,4 @@
-package net.eunainter;
+package net.eunainter.r2std2oid;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -23,15 +23,15 @@ import org.json.JSONObject;
 
 import android.os.AsyncTask;
 import android.util.Log;
-import eu.gtinformatica.dador.LoginActivity;
 
 public class R2stD2oid extends AsyncTask<String, Void, String> {
-	LoginActivity _window;
+	HandleObservers observers;
 	
 	
-	public FetchWebpage(LoginActivity window) {
-		this._window = window;
+	public R2stD2oid() {
+		observers = new HandleObservers();
 	}
+	
     @Override
     protected String doInBackground(String... urls) {
           
@@ -42,12 +42,14 @@ public class R2stD2oid extends AsyncTask<String, Void, String> {
             return "Unable to retrieve web page. URL may be invalid.";
         }
     }
+    
+    
     // onPostExecute displays the results of the AsyncTask.
     @Override
     protected void onPostExecute(String result) {
 //        textView.setText(result);
     	System.out.println("El result: " + result);
-    	_window.showMessage(result);
+//    	_window.showMessage(result);
    }
     
     private String downloadUrl(String myurl) throws IOException {
@@ -111,31 +113,6 @@ public class R2stD2oid extends AsyncTask<String, Void, String> {
 
 			return result;
 			
-			
-//            URL url = new URL(myurl);
-//            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-////            conn.setReadTimeout(10000 /* milliseconds */);
-////            conn.setConnectTimeout(15000 /* milliseconds */);
-//            conn.setRequestMethod("POST");
-//            conn.setDoOutput(true);
-//            conn.setDoInput(true);
-//            
-//            
-//            conn.addRequestProperty("username", paramUsername);
-//            conn.addRequestProperty("password", paramPassword);
-//            
-//            // Starts the query
-//            conn.connect();
-//            int response = conn.getResponseCode();
-//            Log.d("DEBUG", "The response is: " + response);
-//            is = conn.getInputStream();
-//
-//            // Convert the InputStream into a string
-//            String contentAsString = readIt(is, len);
-//            return contentAsString;
-            
-        // Makes sure that the InputStream is closed after the app is
-        // finished using it.
         } finally {
             if (is != null) {
                 is.close();
