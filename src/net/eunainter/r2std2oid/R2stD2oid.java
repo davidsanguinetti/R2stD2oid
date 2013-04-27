@@ -54,6 +54,7 @@ public class R2stD2oid extends AsyncTask<RequestR2D2, Void, String> {
 		//        textView.setText(result);
 		System.out.println("El result: " + result);
 		//    	_window.showMessage(result);
+		this.observers.notifyObservers(result);
 	}
 
 	private String downloadUrl(RequestR2D2 myRequest) throws IOException {
