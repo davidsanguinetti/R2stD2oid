@@ -3,6 +3,7 @@
 	<name>R2stD2oid</name>
 	<comment></comment>
 	<projects>
+		<project>Dador</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
