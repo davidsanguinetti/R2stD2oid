@@ -1,5 +1,10 @@
 package net.eunainter.r2std2oid;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import org.apache.http.NameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -45,6 +50,14 @@ public class RequestR2D2 {
 
 	public JSONObject getJson() {
 		return json;
+	}
+	
+	public List<NameValuePair> getNameValueJson() {
+		List<NameValuePair> postParams = new ArrayList<NameValuePair>();
+		
+//		Iterator<String> postParams.get
+		
+		return null;
 	}
 
 	public void setJson(JSONObject json) {

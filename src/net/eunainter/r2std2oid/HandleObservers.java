@@ -22,8 +22,16 @@ public class HandleObservers {
 	}
 	
 	public void notifyObservers(String restResult) {
-		for (RestObserver rObserver : this._observers)
+		for (RestObserver rObserver : this._observers) {
+//			rObserver.endConnecting();
 			rObserver.receivedResponse(restResult);
+		}
 	}
+	
+//	public void progressObservers() {
+//		for (RestObserver rObserver : this._observers)
+//			rObserver.startConnecting();
+//		
+//	}
 
 }
