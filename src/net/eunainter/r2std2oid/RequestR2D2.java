@@ -20,7 +20,7 @@ public class RequestR2D2 {
 	public static final byte GET 	= 1;
 	
 	public RequestR2D2(String uri, JSONObject jobject, byte pMethod) {
-		this.url = uri;
+		this.url = uri.trim();
 		if (jobject == null)
 			json = new JSONObject();
 		else
@@ -31,7 +31,7 @@ public class RequestR2D2 {
 	
 	public boolean addParValue(String parameter, String value) {
 		try {
-		    this.json.put(parameter, value);
+		    this.json.put(parameter.trim(), value.trim());
 		} catch (JSONException e) {
 		    Log.e("R2STD2OID", "JSONException: " + e);
 		    return false;

@@ -56,12 +56,12 @@ public class R2stD2oid extends AsyncTask<RequestR2D2, Void, String> {
 	@Override
 	protected void onPostExecute(String result) {
 		//        textView.setText(result);
-		System.out.println("El result: " + result);
+//		System.out.println("El result: " + result);
 		this.observers.notifyObservers(result);
 	}
 
 	public String downloadUrl(RequestR2D2 myRequest) throws IOException {
-//		observers.progressObservers();
+		observers.progressObservers();
 		
 		InputStream is = null;
 		// Only display the first 500 characters of the retrieved
@@ -100,6 +100,7 @@ public class R2stD2oid extends AsyncTask<RequestR2D2, Void, String> {
 				}
 			} catch (ClientProtocolException e) {
 				Log.e(TAG, "ClientProtocolException: " + e);
+//				result = code_error.3;
 			} catch (IOException e) {
 				Log.e(TAG, "IOException: " + e);
 			}

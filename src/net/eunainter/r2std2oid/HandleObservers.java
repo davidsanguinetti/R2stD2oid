@@ -23,15 +23,15 @@ public class HandleObservers {
 	
 	public void notifyObservers(String restResult) {
 		for (RestObserver rObserver : this._observers) {
-//			rObserver.endConnecting();
+			rObserver.endConnecting();
 			rObserver.receivedResponse(restResult);
 		}
 	}
 	
-//	public void progressObservers() {
-//		for (RestObserver rObserver : this._observers)
-//			rObserver.startConnecting();
-//		
-//	}
+	public void progressObservers() {
+		for (RestObserver rObserver : this._observers)
+			rObserver.startConnecting();
+		
+	}
 
 }
