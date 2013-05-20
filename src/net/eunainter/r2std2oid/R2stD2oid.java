@@ -21,7 +21,7 @@ import org.json.JSONObject;
 import android.os.AsyncTask;
 import android.util.Log;
 
-public class R2stD2oid extends AsyncTask<RequestR2D2, Void, String> {
+public class R2stD2oid extends AsyncTask<RequestR2D2, Void, ResponseR2D2> {
 	HandleObservers observers;
 
 	final String TAG = "R2stD2oid";
@@ -43,24 +43,24 @@ public class R2stD2oid extends AsyncTask<RequestR2D2, Void, String> {
 	}
 
 	@Override
-	protected String doInBackground(RequestR2D2... requests) {
+	protected ResponseR2D2 doInBackground(RequestR2D2... requests) {
 
 		try {
 			return downloadUrl(requests[0]);
 		} catch (IOException e) {
-			return "Error processing request";
+			return  new ResponseR2D2(ResponseR2D2.STATUS_BAD_REQUEST, "Error processing request");
 		}
 	}
 
 	// onPostExecute displays the results of the AsyncTask.
 	@Override
-	protected void onPostExecute(String result) {
+	protected void onPostExecute(ResponseR2D2 result) {
 		//        textView.setText(result);
 //		System.out.println("El result: " + result);
 		this.observers.notifyObservers(result);
 	}
 
-	public String downloadUrl(RequestR2D2 myRequest) throws IOException {
+	public ResponseR2D2 downloadUrl(RequestR2D2 myRequest) throws IOException {
 		observers.progressObservers();
 		
 		InputStream is = null;
@@ -68,6 +68,9 @@ public class R2stD2oid extends AsyncTask<RequestR2D2, Void, String> {
 		// web page content.
 		String result ="";
 		int len = 33000;
+		
+		int status = 200;
+		String messageSend = "";
 
 		try {			
 			HttpPost httpPost = new HttpPost(myRequest.getUrl());
@@ -85,6 +88,8 @@ public class R2stD2oid extends AsyncTask<RequestR2D2, Void, String> {
 				httpPost.setHeader("Accept", contentType);
 			} catch (UnsupportedEncodingException e) {
 				Log.e(TAG, "UnsupportedEncodingException: " + e);
+				status = ResponseR2D2.STATUS_UNSUPPORTEDENCODE;
+				messageSend = e.getLocalizedMessage();		
 			}
 
 			try {
@@ -94,18 +99,29 @@ public class R2stD2oid extends AsyncTask<RequestR2D2, Void, String> {
 				if (httpEntity != null) {
 					InputStream ist = httpEntity.getContent();
 
-					result = readIt(ist);
+					status = 200;
+					messageSend = readIt(ist);
 					
 //					Log.i(TAG, "Result: " + result);
 				}
 			} catch (ClientProtocolException e) {
 				Log.e(TAG, "ClientProtocolException: " + e);
-//				result = code_error.3;
+				status = ResponseR2D2.STATUS_CLIENTPROTOCOL;
+				messageSend = e.getLocalizedMessage();
 			} catch (IOException e) {
 				Log.e(TAG, "IOException: " + e);
+				
+				status = ResponseR2D2.STATUS_IOEXCEPTION;
+				messageSend = e.getLocalizedMessage();
+			}
+			catch (Exception e) {
+				Log.e(TAG, "General Exception: " + e);
+				
+				status = ResponseR2D2.STATUS_GENERAL_ERROR;
+				messageSend = e.getLocalizedMessage();			
 			}
 
-			return result;
+			return  new ResponseR2D2(status, messageSend);
 
 		} finally {
 			if (is != null) {

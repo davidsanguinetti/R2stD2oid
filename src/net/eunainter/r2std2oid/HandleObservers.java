@@ -21,7 +21,7 @@ public class HandleObservers {
 		}
 	}
 	
-	public void notifyObservers(String restResult) {
+	public void notifyObservers(ResponseR2D2 restResult) {
 		for (RestObserver rObserver : this._observers) {
 			rObserver.endConnecting();
 			rObserver.receivedResponse(restResult);
