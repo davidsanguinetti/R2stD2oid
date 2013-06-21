@@ -11,6 +11,8 @@ import org.json.JSONObject;
 import android.util.Log;
 
 public class RequestR2D2 {
+	
+	private short		_id;
 
 	private String 		url;
 	private JSONObject 	json;
@@ -21,6 +23,7 @@ public class RequestR2D2 {
 	
 	public RequestR2D2(String uri, JSONObject jobject, byte pMethod) {
 		this.url = uri.trim();
+		
 		if (jobject == null)
 			json = new JSONObject();
 		else
@@ -29,6 +32,10 @@ public class RequestR2D2 {
 		this.publishMethod = publishMethod;
 	}
 	
+	public RequestR2D2() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public boolean addParValue(String parameter, String value) {
 		try {
 		    this.json.put(parameter.trim(), value.trim());
@@ -70,6 +77,14 @@ public class RequestR2D2 {
 
 	public void setPublishMethod(byte publishMethod) {
 		this.publishMethod = publishMethod;
+	}
+
+	public short getId() {
+		return _id;
+	}
+
+	public void setId(short _id) {
+		this._id = _id;
 	}
 	
 }
