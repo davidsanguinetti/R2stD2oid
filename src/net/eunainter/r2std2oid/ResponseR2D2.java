@@ -1,7 +1,9 @@
 package net.eunainter.r2std2oid;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONTokener;
 
 public class ResponseR2D2 {
 
@@ -10,6 +12,13 @@ public class ResponseR2D2 {
 	
 	
 	private short _id;
+	private kJsonType jsonRespType = null;
+	
+	
+	public static enum kJsonType {
+		JSON_OBJECT,
+		JSON_ARRAY
+	}
 
 
 	public final static int STATUS_REQUEST_ERROR = 900;
@@ -30,6 +39,8 @@ public class ResponseR2D2 {
 	public ResponseR2D2(int mCode, String mMessage) {
 		this.mCode = mCode;
 		this.mMessage = mMessage;
+		
+		this.jsonRespType = (getResponseType());
 	}
 
 
@@ -48,17 +59,44 @@ public class ResponseR2D2 {
 		return mMessage;
 	}
 	
-	public JSONObject getJSON() {
-		JSONObject json;
+	public JSONObject getJSONObj() {
+		JSONObject jsObj;
+		
 		try {
-			json = new JSONObject(mMessage);
-		} catch (JSONException
-				e) {
-			// TODO Auto-generated catch block
-			return null;
+			jsObj= new JSONObject(mMessage);
+		} catch (JSONException e) {
+			jsObj = null;
 		}
 		
-		return json;
+		return jsObj;
+	}
+	
+	public JSONArray getJSONArray() {
+		JSONArray jsarray;
+		
+		try {
+			jsarray= new JSONArray(mMessage);
+		} catch (JSONException e) {
+			jsarray = null;
+		}
+		
+		return jsarray;
+	}
+	
+	public kJsonType getResponseType(){
+		Object json;
+		try {
+			json= new JSONTokener(mMessage).nextValue();
+		}
+		catch(JSONException e) {
+			return null;
+		}
+		if (json instanceof JSONObject)
+			return kJsonType.JSON_OBJECT;
+		else if (json instanceof JSONArray)
+			return kJsonType.JSON_ARRAY;
+		
+		return null;
 	}
 
 	public static String errorMessage(int messageCode) {
