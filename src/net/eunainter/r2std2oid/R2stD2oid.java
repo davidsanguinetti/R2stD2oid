@@ -5,11 +5,14 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.UnknownHostException;
+import java.util.List;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.CookieStore;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.protocol.ClientContext;
 import org.apache.http.entity.StringEntity;
@@ -111,13 +114,18 @@ public class R2stD2oid extends AsyncTask<RequestR2D2, Void, ResponseR2D2> {
 
 				// GET
 			} else {
-				Uri urltosend = new Uri.Builder()
-				.scheme("http")
-				.authority("foo.com")
-				.path("someservlet")
-				//		    .appendQueryParameter("param1", foo)
-				//		    .appendQueryParameter("param2", bar)
-				.build();
+				/*
+				 * Builds the url to send
+				 */
+				Uri.Builder bld = Uri.parse(myRequest.getUrl()).buildUpon();
+				List<NameValuePair> params = myRequest.getNameValueJson();
+				for (int i=0; i < params.size(); i++)
+					bld.appendQueryParameter(params.get(i).getName(), params.get(i).getValue());
+				String urltosend = bld.toString();
+				
+				HttpGet request = new HttpGet(urltosend);
+				
+				httpResponse = R2stD2oid.getHttpClient().execute(request, localContext);
 			}
 
 			if (status == 200) {

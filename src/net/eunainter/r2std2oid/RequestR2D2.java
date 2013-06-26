@@ -1,10 +1,10 @@
 package net.eunainter.r2std2oid;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -15,8 +15,10 @@ public class RequestR2D2 {
 	private short		_id;
 
 	private String 		url;
-	private JSONObject 	json;
 	private byte		publishMethod;
+	private ArrayList<NameValuePair> params;
+	private JSONObject 	_json;
+	
 	
 	public static final byte POST	= 0;
 	public static final byte GET 	= 1;
@@ -24,12 +26,14 @@ public class RequestR2D2 {
 	public RequestR2D2(String uri, JSONObject jobject, byte pMethod) {
 		this.url = uri.trim();
 		
-		if (jobject == null)
-			json = new JSONObject();
-		else
-			json = jobject;
+		params = new ArrayList<NameValuePair>();
 		
-		this.publishMethod = publishMethod;
+		if (jobject == null)
+			_json = new JSONObject();
+		else
+			_json = jobject;
+		
+		this.publishMethod = pMethod;
 	}
 	
 	public RequestR2D2() {
@@ -37,15 +41,19 @@ public class RequestR2D2 {
 	}
 
 	public boolean addParValue(String parameter, String value) {
+		return params.add(new BasicNameValuePair(parameter.trim(), value.trim()));
+	}
+	
+/*	public boolean addParValue(String parameter, JSONObject value) {
 		try {
-		    this.json.put(parameter.trim(), value.trim());
+		    this._json.put(parameter.trim(), value);
 		} catch (JSONException e) {
 		    Log.e("R2STD2OID", "JSONException: " + e);
 		    return false;
 		}
 		
 		return true;
-	}
+	}*/
 
 	public String getUrl() {
 		return url;
@@ -56,19 +64,25 @@ public class RequestR2D2 {
 	}
 
 	public JSONObject getJson() {
+		JSONObject 	json = new JSONObject();
+		try {
+			for (NameValuePair nvp : params)
+				json.put(nvp.getName(), nvp.getValue());
+		} catch (JSONException e) {
+		    Log.e("R2STD2OID", "JSONException: " + e);
+		    return null;
+		}
+		
 		return json;
 	}
 	
 	public List<NameValuePair> getNameValueJson() {
-		List<NameValuePair> postParams = new ArrayList<NameValuePair>();
 		
-//		Iterator<String> postParams.get
-		
-		return null;
+		return this.params;
 	}
 
 	public void setJson(JSONObject json) {
-		this.json = json;
+		this._json = json;
 	}
 
 	public byte getPublishMethod() {
