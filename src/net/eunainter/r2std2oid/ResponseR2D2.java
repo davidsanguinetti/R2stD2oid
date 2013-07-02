@@ -11,7 +11,7 @@ public class ResponseR2D2 {
 	private String mMessage;
 	
 	
-	private short _id;
+	private int _id;
 	private kJsonType jsonRespType = null;
 	
 	
@@ -146,13 +146,13 @@ public class ResponseR2D2 {
 	/*
 	 * Id of the request
 	 */
-	public short getId() {
+	public int getId() {
 		return _id;
 	}
 
 
-	public void setId(short _id) {
-		this._id = _id;
+	public void setId(int idRequest) {
+		this._id = idRequest;
 	}
 
 

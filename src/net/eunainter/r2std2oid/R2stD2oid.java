@@ -58,6 +58,7 @@ public class R2stD2oid extends AsyncTask<RequestR2D2, Void, ResponseR2D2> {
 		try {
 			return downloadUrl(requests[0]);
 		} catch (IOException e) {
+			Log.e("ERRREQUEST", e.getMessage());
 			return  new ResponseR2D2(ResponseR2D2.STATUS_BAD_REQUEST, "Error processing request");
 		}
 	}
@@ -78,19 +79,31 @@ public class R2stD2oid extends AsyncTask<RequestR2D2, Void, ResponseR2D2> {
 		// web page content.
 		String result ="";
 		int len = 33000;
+		
+		int idRequest = myRequest.getId();
+		
 
 		int status = 200;
 		String messageSend = "";
 
 		try {		
 			HttpResponse httpResponse = null;
-			JSONObject jsonObj = myRequest.getJson();
+			
+			/**
+			 * Always gives priority to hardcoded string entity
+			 */
+			JSONObject jsonObj = myRequest.createJson();
+					
+//					(myRequest.getJson() == null ||
+//					myRequest.getJson().length() == 0) ?  myRequest.createJson() : myRequest.getJson();
+//			String st2send = myRequest.getStringEntity();
 
 			if (myRequest.getPublishMethod() == RequestR2D2.POST) {
 				try {
 					HttpPost httpPost = new HttpPost(myRequest.getUrl());
 					String contentType = "application/json";
-					StringEntity stentt = new StringEntity(jsonObj.toString());
+					String st2send = (myRequest.getStringEntity() == null) ? jsonObj.toString() : myRequest.getStringEntity();
+					StringEntity stentt = new StringEntity(st2send);
 					stentt.setContentEncoding(HTTP.UTF_8);
 					stentt.setContentType(contentType);
 					httpPost.setEntity(stentt);
@@ -162,14 +175,14 @@ public class R2stD2oid extends AsyncTask<RequestR2D2, Void, ResponseR2D2> {
 				}
 			}
 			ResponseR2D2 response = new ResponseR2D2(status, messageSend);
-			response.setId(myRequest.getId());
+			response.setId(idRequest);
 			
 			return response;
 
 		} finally {
-			if (is != null) {
+/*			if (is != null) {
 				is.close();
-			} 
+			} */
 		}
 	}
 
@@ -190,7 +203,7 @@ public class R2stD2oid extends AsyncTask<RequestR2D2, Void, ResponseR2D2> {
 	}
 
 	public static DefaultHttpClient getHttpClient() {
-		if (httpClient == null) {
+//		if (httpClient == null) {
 			httpClient = new DefaultHttpClient();
 			if (mCookie == null) {
 
@@ -201,10 +214,10 @@ public class R2stD2oid extends AsyncTask<RequestR2D2, Void, ResponseR2D2> {
 
 
 				mCookie = httpClient.getCookieStore();
-
-				httpClient.setCookieStore(mCookie);
 			}
-		}
+			httpClient.setCookieStore(mCookie);
+			
+//		}
 		return httpClient;
 	}
 }

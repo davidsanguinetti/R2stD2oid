@@ -18,7 +18,7 @@ public class RequestR2D2 {
 	private byte		publishMethod;
 	private ArrayList<NameValuePair> params;
 	private JSONObject 	_json;
-	
+	private String	mStringEntity;
 	
 	public static final byte POST	= 0;
 	public static final byte GET 	= 1;
@@ -62,8 +62,12 @@ public class RequestR2D2 {
 	public void setUrl(String url) {
 		this.url = url;
 	}
-
+	
 	public JSONObject getJson() {
+		return this._json;
+	}
+
+	public JSONObject createJson() {
 		JSONObject 	json = new JSONObject();
 		try {
 			for (NameValuePair nvp : params)
@@ -99,6 +103,14 @@ public class RequestR2D2 {
 
 	public void setId(short _id) {
 		this._id = _id;
+	}
+
+	public String getStringEntity() {
+		return mStringEntity;
+	}
+
+	public void setStringEntity(String mStringEntity) {
+		this.mStringEntity = mStringEntity;
 	}
 	
 }
