@@ -6,6 +6,7 @@ import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.UnknownHostException;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -15,6 +16,7 @@ import org.apache.http.client.CookieStore;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.protocol.ClientContext;
+import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.BasicHttpContext;
@@ -92,7 +94,9 @@ public class R2stD2oid extends AsyncTask<RequestR2D2, Void, ResponseR2D2> {
 			/**
 			 * Always gives priority to hardcoded string entity
 			 */
-			JSONObject jsonObj = myRequest.createJson();
+			JSONObject jsonObj = (myRequest.getJson() == null) 
+					? myRequest.createJson()
+					: myRequest.getJson();
 					
 //					(myRequest.getJson() == null ||
 //					myRequest.getJson().length() == 0) ?  myRequest.createJson() : myRequest.getJson();
@@ -139,6 +143,7 @@ public class R2stD2oid extends AsyncTask<RequestR2D2, Void, ResponseR2D2> {
 				HttpGet request = new HttpGet(urltosend);
 				
 				httpResponse = R2stD2oid.getHttpClient().execute(request, localContext);
+				
 			}
 
 			if (status == 200) {
@@ -180,9 +185,12 @@ public class R2stD2oid extends AsyncTask<RequestR2D2, Void, ResponseR2D2> {
 			return response;
 
 		} finally {
-/*			if (is != null) {
-				is.close();
-			} */
+			if (httpClient != null) {
+				ClientConnectionManager cmanager = R2stD2oid.getHttpClient().getConnectionManager();
+				
+				if (cmanager != null)
+				cmanager.closeIdleConnections(3,TimeUnit.SECONDS);
+			}
 		}
 	}
 
@@ -203,6 +211,23 @@ public class R2stD2oid extends AsyncTask<RequestR2D2, Void, ResponseR2D2> {
 	}
 
 	public static DefaultHttpClient getHttpClient() {
+		/*
+		if (httpClient == null) {
+			httpClient = new DefaultHttpClient();
+			if (mCookie == null) {
+
+				// Create local HTTP context
+				localContext = new BasicHttpContext();
+				// Bind custom cookie store to the local context
+				localContext.setAttribute(ClientContext.COOKIE_STORE, mCookie);
+
+
+				mCookie = httpClient.getCookieStore();
+				httpClient.setCookieStore(mCookie);
+			}
+//			httpClient.setCookieStore(mCookie);
+			
+		}*/
 //		if (httpClient == null) {
 			httpClient = new DefaultHttpClient();
 			if (mCookie == null) {
