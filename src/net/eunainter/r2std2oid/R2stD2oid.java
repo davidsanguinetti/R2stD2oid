@@ -94,7 +94,7 @@ public class R2stD2oid extends AsyncTask<RequestR2D2, Void, ResponseR2D2> {
 			/**
 			 * Always gives priority to hardcoded string entity
 			 */
-			JSONObject jsonObj = (myRequest.getJson() == null) 
+			JSONObject jsonObj = (myRequest.getJson() == null || myRequest.getJson().length() == 0) 
 					? myRequest.createJson()
 					: myRequest.getJson();
 					

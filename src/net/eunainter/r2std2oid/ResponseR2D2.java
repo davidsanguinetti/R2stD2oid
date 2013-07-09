@@ -51,6 +51,8 @@ public class ResponseR2D2 {
 		this.mCode = mCode;
 	}
 	public String getMessage() {
+		
+		
 
 		String messageSend = mMessage;
 
