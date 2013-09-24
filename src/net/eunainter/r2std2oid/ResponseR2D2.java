@@ -5,6 +5,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import android.util.Log;
+
 public class ResponseR2D2 {
 
 	private int mCode;
@@ -78,7 +80,11 @@ public class ResponseR2D2 {
 		
 		try {
 			jsarray= new JSONArray(mMessage);
+			Log.i("JSONAR", "msg: " + mMessage);
 		} catch (JSONException e) {
+			jsarray = null;
+		}
+		catch(Exception e) {
 			jsarray = null;
 		}
 		
@@ -91,6 +97,9 @@ public class ResponseR2D2 {
 			json= new JSONTokener(mMessage).nextValue();
 		}
 		catch(JSONException e) {
+			return null;
+		}
+		catch(Exception e) {
 			return null;
 		}
 		if (json instanceof JSONObject)

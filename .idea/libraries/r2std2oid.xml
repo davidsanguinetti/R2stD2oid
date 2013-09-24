@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="r2std2oid">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/bin/r2std2oid.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

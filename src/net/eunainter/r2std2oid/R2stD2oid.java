@@ -19,6 +19,7 @@ import org.apache.http.client.protocol.ClientContext;
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
@@ -60,7 +61,7 @@ public class R2stD2oid extends AsyncTask<RequestR2D2, Void, ResponseR2D2> {
 		try {
 			return downloadUrl(requests[0]);
 		} catch (IOException e) {
-			Log.e("ERRREQUEST", e.getMessage());
+			Log.e("ERRREQUEST", e.getClass().getName());
 			return  new ResponseR2D2(ResponseR2D2.STATUS_BAD_REQUEST, "Error processing request");
 		}
 	}
@@ -70,7 +71,12 @@ public class R2stD2oid extends AsyncTask<RequestR2D2, Void, ResponseR2D2> {
 	protected void onPostExecute(ResponseR2D2 result) {
 		//        textView.setText(result);
 		//		System.out.println("El result: " + result);
+		try {
 		this.observers.notifyObservers(result);
+		}
+		catch (Exception e) {
+			Log.e("RSTD2DERR", (e.getLocalizedMessage() == null) ? e.getClass().getName() : (e.getLocalizedMessage()));
+		}
 	}
 
 	public ResponseR2D2 downloadUrl(RequestR2D2 myRequest) throws IOException {
@@ -98,6 +104,8 @@ public class R2stD2oid extends AsyncTask<RequestR2D2, Void, ResponseR2D2> {
 					? myRequest.createJson()
 					: myRequest.getJson();
 					
+					
+					
 //					(myRequest.getJson() == null ||
 //					myRequest.getJson().length() == 0) ?  myRequest.createJson() : myRequest.getJson();
 //			String st2send = myRequest.getStringEntity();
@@ -105,18 +113,32 @@ public class R2stD2oid extends AsyncTask<RequestR2D2, Void, ResponseR2D2> {
 			if (myRequest.getPublishMethod() == RequestR2D2.POST) {
 				try {
 					HttpPost httpPost = new HttpPost(myRequest.getUrl());
-					String contentType = "application/json";
+					String contentType ="application/json";
+					String charset = "Charset=UTF-8";
 					String st2send = (myRequest.getStringEntity() == null) ? jsonObj.toString() : myRequest.getStringEntity();
-					StringEntity stentt = new StringEntity(st2send);
+					
+					
+//					st2send =  JSONObject.quote(st2send);
+
+					StringEntity stentt = new StringEntity(st2send, HTTP.UTF_8);
 					stentt.setContentEncoding(HTTP.UTF_8);
 					stentt.setContentType(contentType);
 					httpPost.setEntity(stentt);
+/*					
+					org.apache.commons.
+					StringEscapeUtils*/
 
 					httpPost.setHeader("Content-Type",contentType);
+					httpPost.setHeader("charset", "utf-8");
 					httpPost.setHeader("Accept", contentType);
 
-
 					httpResponse = R2stD2oid.getHttpClient().execute(httpPost, localContext);
+					
+					status = httpResponse.getStatusLine().getStatusCode();
+				
+					messageSend = httpResponse.getStatusLine().getReasonPhrase();
+					messageSend = messageSend.substring(messageSend.indexOf(":") + 1);
+					
 					
 					Log.i("r2i", "Chegou aqui");
 				} catch (UnsupportedEncodingException e) {
@@ -127,6 +149,9 @@ public class R2stD2oid extends AsyncTask<RequestR2D2, Void, ResponseR2D2> {
 					Log.e(TAG, "UnknownHostException: " + e);
 					status = ResponseR2D2.UNKNOWNHOST;
 					messageSend = e.getLocalizedMessage();					
+				} catch(Exception e) {
+					
+					Log.e("DADORERR", e.getClass().getName());
 				}
 
 				// GET
@@ -139,6 +164,9 @@ public class R2stD2oid extends AsyncTask<RequestR2D2, Void, ResponseR2D2> {
 				for (int i=0; i < params.size(); i++)
 					bld.appendQueryParameter(params.get(i).getName(), params.get(i).getValue());
 				String urltosend = bld.toString();
+				
+				if (urltosend == null)
+					return null;
 				
 				HttpGet request = new HttpGet(urltosend);
 				
@@ -154,7 +182,6 @@ public class R2stD2oid extends AsyncTask<RequestR2D2, Void, ResponseR2D2> {
 					if (httpEntity != null) {
 //						InputStream ist = httpEntity.getContent();
 
-						status = 200;
 						messageSend = EntityUtils.toString(httpEntity, HTTP.UTF_8);
 
 //						messageSend = readIt(ist);
@@ -230,6 +257,9 @@ public class R2stD2oid extends AsyncTask<RequestR2D2, Void, ResponseR2D2> {
 		}*/
 //		if (httpClient == null) {
 			httpClient = new DefaultHttpClient();
+			httpClient.getParams().setParameter(CoreProtocolPNames.HTTP_ELEMENT_CHARSET,
+					"utf-8");
+			
 			if (mCookie == null) {
 
 				// Create local HTTP context
