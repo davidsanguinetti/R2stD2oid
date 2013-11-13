@@ -12,7 +12,7 @@ import android.util.Log;
 
 public class RequestR2D2 {
 	
-	private short		_id;
+	private int			_id;
 
 	private String 		url;
 	private byte		publishMethod;
@@ -97,11 +97,11 @@ public class RequestR2D2 {
 		this.publishMethod = publishMethod;
 	}
 
-	public short getId() {
+	public int getId() {
 		return _id;
 	}
 
-	public void setId(short _id) {
+	public void setId(int _id) {
 		this._id = _id;
 	}
 
