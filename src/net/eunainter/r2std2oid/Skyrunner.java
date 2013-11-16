@@ -7,6 +7,7 @@ public class Skyrunner {
 	private R2stD2oid mR2d2;
 	private RestObserver mrObserver;
 	
+	
 	// Map of requests
 	private HashMap<Enum, Integer> mRequestIds;
 	
@@ -17,15 +18,18 @@ public class Skyrunner {
 	public void setmRequestIds(HashMap<Enum, Integer> mRequestIds) {
 		this.mRequestIds = mRequestIds;
 	}
-
-	// Request tag
-	public static enum kRequests {
-		POS_UM,
-		POS_DOIS,
-		POS_TRES,
-		POS_QUATRO,
-		POS_CINCO,
-		SHAREPARAMS
+	
+	/*
+	 * Five tag for requests.
+	 * Enums are not easy to implement in switch in Java: traditional method used
+	 */
+	public static final class RequestsTag {
+		public static final int KPOSUM		= 0;
+		public static final int KPOSDOIS	= 1;
+		public static final int KPOSTRES	= 2;
+		public static final int KPOSQUATRO	= 3;
+		public static final int KPOSCINCO	= 4;
+		public static final int SHAREPARAMS	= 5;
 	}
 	
 	public Skyrunner() {
@@ -55,9 +59,11 @@ public class Skyrunner {
 		mRequestIds.put(tag, request.getId());
 	}
 	
-	public HashMap<Enum, Integer> getRequestIds() {
+	private HashMap<Enum, Integer> getRequestIds() {
+		
 		return mRequestIds;
 	}
+	
 	
 
 }
