@@ -46,16 +46,17 @@ public class Skyrunner {
 	
 	
 	public void addObserver(RestObserver respobs) {
+		this.mrObserver = respobs;
 		mR2d2.addObserver(respobs);
 	}
 	
 	public void sendRequest(RequestR2D2 request, Integer tag) {
 		createConnection();
 		mR2d2.execute(request);
-		mRequestIds.put(tag, request.getId());
+		mRequestIds.put(request.getId(), tag);
 	}
 	
-	private HashMap<Integer, Integer> getRequestIds() {
+	public HashMap<Integer, Integer> getRequestIds() {
 		
 		return mRequestIds;
 	}

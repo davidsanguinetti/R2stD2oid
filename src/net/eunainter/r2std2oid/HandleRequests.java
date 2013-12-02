@@ -1,7 +1,6 @@
 package net.eunainter.r2std2oid;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Random;
 
 
