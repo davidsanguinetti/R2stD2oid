@@ -31,7 +31,6 @@ public class HandleObservers {
 	public void progressObservers() {
 		for (RestObserver rObserver : this._observers)
 			rObserver.startConnecting();
-		
 	}
 
 }

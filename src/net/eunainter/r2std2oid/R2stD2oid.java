@@ -59,6 +59,8 @@ public class R2stD2oid extends AsyncTask<RequestR2D2, Void, ResponseR2D2> {
 	protected ResponseR2D2 doInBackground(RequestR2D2... requests) {
 
 		try {
+			Log.i("R2D2", "Sending req to: "+requests[0].getUrl());
+			
 			return downloadUrl(requests[0]);
 		} catch (IOException e) {
 			Log.e("ERRREQUEST", e.getClass().getName());
