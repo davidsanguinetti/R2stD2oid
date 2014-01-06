@@ -32,5 +32,10 @@ public class HandleObservers {
 		for (RestObserver rObserver : this._observers)
 			rObserver.startConnecting();
 	}
+	
+	public void timeoutObservers() {
+		for (RestObserver rObserver : this._observers)
+			rObserver.requestTimeout();
+	}
 
 }
