@@ -6,6 +6,9 @@ public class Skyrunner {
 	
 	private R2stD2oid mR2d2;
 	private RestObserver mrObserver;
+	private int mTimeout = 10000;
+	
+	private final static int TIMEOUT = 10;
 	
 	
 	// Map of requests
@@ -28,19 +31,22 @@ public class Skyrunner {
 		public static final int SHAREPARAMS	= 0;
 	}
 	
-	public Skyrunner() {
+	public Skyrunner(int timeout) {
 		mR2d2 = new R2stD2oid();	
+		this.mTimeout = timeout;
+		mR2d2.setRequestTimeout(timeout);
 		
 		mRequestIds = new HashMap<Integer, Integer>();
 	}
 	
 	public Skyrunner(RestObserver robserver) {
-		this();
+		this(TIMEOUT);
 		this.mrObserver = robserver;
 	}
 	
 	private void createConnection(){
 		mR2d2 = new R2stD2oid();
+		mR2d2.setRequestTimeout(mTimeout);
 		mR2d2.addObserver(mrObserver);
 	}
 	
