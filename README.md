@@ -11,8 +11,10 @@ Characteristics
 * Tag each call, allowing multiple calls in the same activity;
 * Implements Observable, allowing synch and asynch calls;
 * 3 lines of code are enough to make a server call;
-* error handling included
+* Error handling included;
 
+Example
+--------
 
 ```java
 public class LocalAgenda implements RestObserver {
@@ -27,7 +29,7 @@ public class LocalAgenda implements RestObserver {
 
 		mSky.addObserver(this);
 		RequestR2D2 req = HandleRequests.getRequest(url, RequestR2D2.GET);
-		req.addParameter("contactId", "*"); 
+		req.addParameter("lastname", "Doe"); 
 		
 		mSky.sendRequest(req, Skyrunner.RequestTag.KPOSONE);
 	}
