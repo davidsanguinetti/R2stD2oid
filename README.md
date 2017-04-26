@@ -7,10 +7,10 @@ Library to make REST calls on Android
 Characteristics
 --------
 
-* Agile calls to a REST server;
+* Agile calls to a **REST server**;
 * Tag each call, allowing multiple calls in the same activity;
 * Implements Observable, allowing synch and asynch calls;
-* 3 lines of code are enough to make a server call;
+* _3 lines of code_ are enough to make a server call;
 * Error handling included;
 
 Example
